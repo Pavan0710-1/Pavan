@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TaskMaster Pro - Home</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <aside id="sidebar" class="sidebar" aria-label="Primary Navigation"></aside>
+
+  <main class="main-content" role="main" tabindex="-1">
+
+    <section class="welcome" aria-labelledby="welcome-title">
+      <h1 id="welcome-title">👋 Welcome, <span class="username">Alex</span>!</h1>
+      <p>Manage your tasks, study better, and stay motivated with TaskMaster Pro.</p>
+    </section>
+
+    <section class="notification" role="region" aria-live="polite">
+      <p>📢 You have <strong>2 new reminders</strong> for today. Check your planner!</p>
+    </section>
+
+    <!-- New: Daily Task Overview -->
+    <section class="daily-tasks" aria-labelledby="daily-tasks-title">
+      <h2 id="daily-tasks-title">Today's Task Overview</h2>
+      <ul class="task-list">
+        <li>
+          <input type="checkbox" id="task1" />
+          <label for="task1">Finish project report</label>
+        </li>
+        <li>
+          <input type="checkbox" id="task2" />
+          <label for="task2">Review notes for math exam</label>
+        </li>
+        <li>
+          <input type="checkbox" id="task3" />
+          <label for="task3">Plan weekend study session</label>
+        </li>
+      </ul>
+      <progress value="1" max="3" aria-valuemin="0" aria-valuemax="3" aria-valuenow="1" role="progressbar"></progress>
+      <p class="progress-text">1 of 3 tasks completed</p>
+    </section>
+
+    <!-- New: Upcoming Deadlines -->
+    <section class="deadlines" aria-labelledby="deadlines-title">
+      <h2 id="deadlines-title">Upcoming Deadlines</h2>
+      <ul>
+        <li><strong>Sep 12:</strong> Submit essay draft</li>
+        <li><strong>Sep 15:</strong> Chemistry lab report</li>
+        <li><strong>Sep 20:</strong> Team project presentation</li>
+      </ul>
+    </section>
+
+    <!-- New: Motivational Quote -->
+    <section class="quote" aria-label="Motivational Quote">
+      <blockquote>
+        “The secret of getting ahead is getting started.” – Mark Twain
+      </blockquote>
+    </section>
+
+    <!-- New: Quick Add Task -->
+    <section class="quick-add" aria-labelledby="quick-add-title">
+      <h2 id="quick-add-title">Add a Quick Task</h2>
+      <form id="quickAddForm">
+        <input type="text" id="newTask" placeholder="What do you need to do?" required aria-label="New task description"/>
+        <button type="submit" class="btn-primary">Add Task</button>
+      </form>
+    </section>
+
+    <!-- New: Productivity Stats -->
+    <section class="stats" aria-labelledby="stats-title">
+      <h2 id="stats-title">Your Productivity Stats</h2>
+      <div class="stat-cards">
+        <div class="card">
+          <h3>Tasks Completed</h3>
+          <p>23</p>
+        </div>
+        <div class="card">
+          <h3>Hours Studied</h3>
+          <p>15h 30m</p>
+        </div>
+        <div class="card">
+          <h3>Streak</h3>
+          <p>5 days</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Existing Auth Section -->
+    <section class="auth-section" aria-labelledby="auth-title">
+      <h2 id="auth-title">Login / Sign Up</h2>
+      <form class="auth-form" aria-describedby="auth-desc" novalidate>
+        <input type="email" placeholder="Email" required aria-required="true" aria-label="Email" />
+        <input type="password" placeholder="Password" required aria-required="true" aria-label="Password" />
+        <div class="auth-buttons">
+          <button class="btn-primary" type="submit">Login</button>
+          <button class="btn-secondary" type="button">Sign Up</button>
+        </div>
+      </form>
+
+      <div class="divider" aria-hidden="true"><span>OR</span></div>
+
+      <button class="btn-google" type="button" aria-label="Sign up with Google">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" alt="Google logo" />
+        Sign up with Google
+      </button>
+    </section>
+  </main>
+
+  <script>
+    // Sidebar loader code remains the same
+    async function loadSidebar() {
+      try {
+        const response = await fetch('../Navigation/nav.html');
+        if (!response.ok) throw new Error('Failed to load sidebar navigation');
+        const navHTML = await response.text();
+        document.getElementById('sidebar').innerHTML = navHTML;
+
+        document.querySelectorAll('li.has-submenu > a').forEach(anchor => {
+          anchor.addEventListener('click', e => {
+            e.preventDefault();
+            const parentLi = anchor.parentElement;
+            parentLi.classList.toggle('open');
+          });
+        });
+
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('nav ul.nav a').forEach(link => {
+          if (link.getAttribute('href') === currentPage) {
+            link.classList.add('active');
+            const parentLi = link.closest('li.has-submenu');
+            if (parentLi) parentLi.classList.add('open');
+          }
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadSidebar);
+
+    // Quick Add Task functionality (simple front-end demo)
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('quickAddForm');
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const input = document.getElementById('newTask');
+        if (input.value.trim()) {
+          alert(`New task added: "${input.value.trim()}"`);
+          input.value = '';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
